@@ -8,6 +8,7 @@ import {
   Delete,
   ValidationPipe,
   ParseIntPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -29,7 +30,9 @@ export class UsersController {
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.findOne(id);
+    const user = this.usersService.findOne(id);
+    if (!user) throw new NotFoundException("couldn't find rquested user");
+    return user;
   }
 
   @Patch(':id')

@@ -11,18 +11,22 @@ import {
 import { AppService } from './app.service';
 import { LoginDto } from './dtos/login.dto';
 import { CreateUserDto } from './users/dto/create-user.dto';
+import { User } from './users/entities/user.entity';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('login')
+  @HttpCode(200)
   async login(@Body(ValidationPipe) loginDto: LoginDto) {
+    let user: Partial<User>;
     try {
-      await this.appService.login(loginDto);
+      user = await this.appService.login(loginDto);
     } catch (error) {
       throw new HttpException(error.message, 400);
     }
+    return user;
   }
 
   @Post('signup')
