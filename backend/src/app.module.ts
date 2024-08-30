@@ -12,6 +12,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PublicMiddleware } from './middleware/public.middleware';
+import { PrivateMiddleware } from './middleware/private.middleware';
 
 @Module({
   imports: [
@@ -38,6 +40,7 @@ import { AppService } from './app.service';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply().forRoutes('posts', 'comments');
+    consumer.apply(PublicMiddleware).forRoutes('posts', 'comments');
+    consumer.apply(PrivateMiddleware).forRoutes('todos');
   }
 }

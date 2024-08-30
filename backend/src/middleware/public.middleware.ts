@@ -4,7 +4,6 @@ import { Request, Response, NextFunction } from 'express';
 @Injectable()
 export class PublicMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    // Passable data checks
     next();
   }
 }
