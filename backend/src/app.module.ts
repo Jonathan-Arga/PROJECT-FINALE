@@ -14,7 +14,6 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PublicMiddleware } from './middleware/public.middleware';
-import { PrivateMiddleware } from './middleware/private.middleware';
 
 @Module({
   imports: [
@@ -43,6 +42,5 @@ import { PrivateMiddleware } from './middleware/private.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(PublicMiddleware).forRoutes('posts', 'comments');
-    consumer.apply(PrivateMiddleware).forRoutes('todos');
   }
 }
