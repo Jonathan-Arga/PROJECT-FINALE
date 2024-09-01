@@ -4,6 +4,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
+@Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;

@@ -10,7 +10,7 @@ import {
 @Entity()
 export class Todo {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;
@@ -18,7 +18,7 @@ export class Todo {
   @Column({ default: false })
   checked: boolean;
 
-  @ManyToOne(() => User, (user) => user.todos)
+  @ManyToOne(() => User, (user) => user.todos, { nullable: false })
   @JoinColumn()
   user: User;
 }
