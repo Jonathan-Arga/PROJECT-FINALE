@@ -9,9 +9,10 @@ import { Repository } from 'typeorm';
 export class TodosService {
   @InjectRepository(Todo) todoRepository: Repository<Todo>;
 
-  create(createTodoDto: CreateTodoDto) {
+  async create(createTodoDto: CreateTodoDto) {
     const newTodo = this.todoRepository.create(createTodoDto);
-    return this.todoRepository.save(newTodo, {});
+    const returnedTodo = await this.todoRepository.save(newTodo, {});
+    return { ...returnedTodo, user: undefined };
   }
 
   findAll(userID: number): Promise<Todo[]> {

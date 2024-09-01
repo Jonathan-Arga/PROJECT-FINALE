@@ -5,7 +5,6 @@ import {
   HttpCode,
   HttpException,
   Post,
-  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AppService } from './app.service';
