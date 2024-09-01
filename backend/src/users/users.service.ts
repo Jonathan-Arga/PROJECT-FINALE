@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +12,11 @@ export class UsersService {
   ) {}
 
   create(createUserDto: CreateUserDto): Promise<User> {
+    if (this.findOneByUsername(createUserDto.username))
+      throw new HttpException('Username already exists', 400);
+    if (this.findOneByEmail(createUserDto.email))
+      throw new HttpException('Email already exists', 400);
+
     const newUser = this.userRepository.create(createUserDto);
     return this.userRepository.save(newUser);
   }
@@ -24,6 +29,9 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
+  findOneByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ email });
+  }
   findOneByUsername(username: string): Promise<User> {
     return this.userRepository.findOneBy({ username });
   }

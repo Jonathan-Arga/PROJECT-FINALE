@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -33,6 +34,11 @@ import { AppService } from './app.service';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../', 'public'),
+    }),
+    JwtModule.register({
+      secret: process.env.SECRET || 'secret',
+      signOptions: { expiresIn: '1d' },
+      global: true,
     }),
   ],
   controllers: [AppController],
