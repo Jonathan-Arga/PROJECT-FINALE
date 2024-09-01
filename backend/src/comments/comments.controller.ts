@@ -21,16 +21,6 @@ export class CommentsController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Post()
-  async create(@Body() createCommentDto: CreateCommentDto) {
-    const post = await this.postsService.findOne(createCommentDto.postid);
-    return await this.commentsService.create(
-      createCommentDto,
-      post,
-      await this.usersService.findOne(createCommentDto.userid),
-    );
-  }
-
   @Get('user/:userid')
   async findByUser(@Param('userid') userid: string) {
     return await this.commentsService.findByUser(
@@ -42,6 +32,16 @@ export class CommentsController {
   async findByPost(@Param('postid') postid: string) {
     return await this.commentsService.findByPost(
       await this.postsService.findOne(+postid),
+    );
+  }
+  // use guards below to check if the user is logged in
+  @Post()
+  async create(@Body() createCommentDto: CreateCommentDto) {
+    const post = await this.postsService.findOne(createCommentDto.postid);
+    return await this.commentsService.create(
+      createCommentDto,
+      post,
+      await this.usersService.findOne(createCommentDto.userid),
     );
   }
 

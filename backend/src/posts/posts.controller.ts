@@ -21,16 +21,6 @@ export class PostsController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Post()
-  async create(@Body() createPostDto: CreatePostDto) {
-    if (!createPostDto.title || !createPostDto.body)
-      return new HttpException(
-        'Invalid Arguments',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    return await this.postsService.create(createPostDto);
-  }
-
   @Get()
   async findAll() {
     return await this.postsService.findAll();
@@ -39,6 +29,16 @@ export class PostsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.postsService.findOne(+id);
+  }
+  // use guards below to check if the user is logged in
+  @Post()
+  async create(@Body() createPostDto: CreatePostDto) {
+    if (!createPostDto.title || !createPostDto.body)
+      return new HttpException(
+        'Invalid Arguments',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    return await this.postsService.create(createPostDto);
   }
 
   @Patch(':id')
