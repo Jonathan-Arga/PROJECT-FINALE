@@ -6,27 +6,23 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PostsService } from 'src/posts/posts.service';
 import { UsersService } from 'src/users/users.service';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('comments')
+@UseGuards(AuthGuard)
 export class CommentsController {
   constructor(
     private readonly commentsService: CommentsService,
     private readonly postsService: PostsService,
     private readonly usersService: UsersService,
   ) {}
-
-  @Get('user/:userid')
-  async findByUser(@Param('userid') userid: string) {
-    return await this.commentsService.findByUser(
-      await this.usersService.findOne(+userid),
-    );
-  }
 
   @Get('post/:postid')
   async findByPost(@Param('postid') postid: string) {

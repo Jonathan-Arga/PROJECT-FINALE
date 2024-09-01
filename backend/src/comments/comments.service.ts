@@ -18,8 +18,8 @@ export class CommentsService {
       post,
       user,
     });
-
-    return await this.commentsRepository.save(createdComment);
+    const savedComment = await this.commentsRepository.save(createdComment);
+    return { ...savedComment, user: undefined };
   }
 
   async findAll() {

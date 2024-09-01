@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { UsersService } from 'src/users/users.service';
 
+// auth guard
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private userService: UsersService) {}

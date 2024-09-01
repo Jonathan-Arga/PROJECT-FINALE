@@ -13,7 +13,9 @@ export class PostsService {
 
   async create(createPostDto: CreatePostDto) {
     const createdPost = this.postsRepository.create(createPostDto);
-    return await this.postsRepository.save(createdPost);
+    const savedPost = await this.postsRepository.save(createdPost);
+
+    return { ...savedPost, user: undefined };
   }
 
   async findAll() {
@@ -21,7 +23,10 @@ export class PostsService {
   }
 
   async findOne(id: number) {
-    return await this.postsRepository.findOne({ where: { id } });
+    return await this.postsRepository.findOne({
+      where: { id },
+      relations: ['comments'],
+    });
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
