@@ -1,7 +1,14 @@
 import { IsString } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @Entity()
@@ -17,9 +24,10 @@ export class Post {
   @IsString()
   body: string;
 
-  @ManyToOne(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
 
   @ManyToOne(() => User, (user) => user.posts)
+  @JoinColumn()
   user: User;
 }

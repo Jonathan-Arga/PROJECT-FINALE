@@ -9,12 +9,16 @@ import {
   ValidationPipe,
   HttpException,
   HttpStatus,
+  ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('posts')
+@UseGuards(AuthGuard)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
@@ -24,8 +28,8 @@ export class PostsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.postsService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.postsService.findOne(id);
   }
   // use guards below to check if the user is logged in
   @Post()
@@ -40,14 +44,14 @@ export class PostsController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) updatePostDto: UpdatePostDto,
   ) {
-    return await this.postsService.update(+id, updatePostDto);
+    return await this.postsService.update(id, updatePostDto);
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.postsService.remove(+id);
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return await this.postsService.remove(id);
   }
 }

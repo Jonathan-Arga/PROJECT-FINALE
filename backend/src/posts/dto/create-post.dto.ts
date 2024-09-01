@@ -13,7 +13,7 @@ export class CreatePostDto {
   @IsString()
   body: string;
 
-  @IsDefined()
   @ManyToOne(() => User, (user) => user.posts)
+  @IsDefined()
   user: User;
 }

@@ -4,8 +4,8 @@ import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -26,10 +26,12 @@ export class Comment {
   body: string;
 
   @IsDefined()
-  @OneToMany(() => Post, (post) => post.comments)
+  @ManyToOne(() => Post, (post) => post.comments)
+  @JoinColumn()
   post: Post;
 
   @IsDefined()
   @ManyToOne(() => User, (user) => user.comments)
+  @JoinColumn()
   user: User;
 }
