@@ -6,20 +6,17 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { UsersService } from 'src/users/users.service';
 
 @Controller('posts')
 export class PostsController {
-  constructor(
-    private readonly postsService: PostsService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @Get()
   async findAll() {
@@ -32,7 +29,7 @@ export class PostsController {
   }
   // use guards below to check if the user is logged in
   @Post()
-  async create(@Body() createPostDto: CreatePostDto) {
+  async create(@Body(ValidationPipe) createPostDto: CreatePostDto) {
     if (!createPostDto.title || !createPostDto.body)
       return new HttpException(
         'Invalid Arguments',
@@ -42,7 +39,10 @@ export class PostsController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  async update(
+    @Param('id') id: string,
+    @Body(ValidationPipe) updatePostDto: UpdatePostDto,
+  ) {
     return await this.postsService.update(+id, updatePostDto);
   }
 
