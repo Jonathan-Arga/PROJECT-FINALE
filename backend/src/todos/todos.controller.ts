@@ -18,7 +18,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { User } from 'src/users/entities/user.entity';
 
-@Controller('todos')
+@Controller('api/todos')
 @UseGuards(AuthGuard)
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}

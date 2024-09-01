@@ -17,7 +17,7 @@ export class AppController {
   @HttpCode(200)
   async login(@Body(ValidationPipe) loginDto: LoginDto) {
     try {
-      return await this.appService.login(loginDto);
+      return { token: await this.appService.login(loginDto) };
     } catch (error) {
       throw error;
     }
@@ -27,7 +27,7 @@ export class AppController {
   @HttpCode(200)
   async signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     try {
-      return await this.appService.signup(createUserDto);
+      return { token: await this.appService.signup(createUserDto) };
     } catch (error) {
       throw error;
     }

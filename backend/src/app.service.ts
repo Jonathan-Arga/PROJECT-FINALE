@@ -21,14 +21,17 @@ export class AppService {
     if (!(await bcrypt.compare(loginDto.password, user.password)))
       throw new HttpException('Invalid credential', 401);
 
-    return this.jwtService.signAsync({ sub: user.id, username: user.username });
+    return await this.jwtService.signAsync({
+      sub: user.id,
+      username: user.username,
+    });
   }
 
   async signup(createUserDto: CreateUserDto) {
     createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
     const newUser = await this.usersService.create(createUserDto);
 
-    return this.jwtService.signAsync({
+    return await this.jwtService.signAsync({
       sub: newUser.id,
       username: newUser.username,
     });

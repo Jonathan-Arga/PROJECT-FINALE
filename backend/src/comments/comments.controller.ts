@@ -15,7 +15,7 @@ import { PostsService } from 'src/posts/posts.service';
 import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('comments')
+@Controller('api/comments')
 @UseGuards(AuthGuard)
 export class CommentsController {
   constructor(
