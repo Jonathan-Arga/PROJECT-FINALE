@@ -1,34 +1,60 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { PostsService } from 'src/posts/posts.service';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(
+    private readonly commentsService: CommentsService,
+    private readonly postsService: PostsService,
+    private readonly usersService: UsersService,
+  ) {}
 
+  @Get('user/:userid')
+  async findByUser(@Param('userid') userid: string) {
+    return await this.commentsService.findByUser(
+      await this.usersService.findOne(+userid),
+    );
+  }
+
+  @Get('post/:postid')
+  async findByPost(@Param('postid') postid: string) {
+    return await this.commentsService.findByPost(
+      await this.postsService.findOne(+postid),
+    );
+  }
+  // use guards below to check if the user is logged in
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentsService.create(createCommentDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
+  async create(@Body() createCommentDto: CreateCommentDto) {
+    const post = await this.postsService.findOne(createCommentDto.postid);
+    return await this.commentsService.create(
+      createCommentDto,
+      post,
+      await this.usersService.findOne(createCommentDto.userid),
+    );
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    return await this.commentsService.update(+id, updateCommentDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.commentsService.remove(+id);
   }
 }

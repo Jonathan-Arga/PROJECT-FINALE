@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     const user = await this.userService.findOne(parseInt(id));
     if (!user) return false;
 
-    req.body.userID = user.id;
+    req.body.user = user;
     return true;
   }
 }

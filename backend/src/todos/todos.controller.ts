@@ -16,7 +16,6 @@ import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
-import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 
 @Controller('todos')
@@ -30,16 +29,16 @@ export class TodosController {
   }
 
   @Get()
-  findAll(@Body('userID') userID: number) {
-    return this.todosService.findAll(userID);
+  findAll(@Body('user') user: User) {
+    return this.todosService.findAll(user.id);
   }
 
   @Get(':id')
   async findOne(
     @Param('id', ParseIntPipe) id: number,
-    @Body('userID') userID: number,
+    @Body('user') user: User,
   ) {
-    const todo = await this.todosService.findOne(id, userID);
+    const todo = await this.todosService.findOne(id, user.id);
     if (todo) return todo;
     throw new NotFoundException('Iten not found');
   }
@@ -47,12 +46,12 @@ export class TodosController {
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body('userID') userID: number,
+    @Body('user') user: User,
     @Body(ValidationPipe) updateTodoDto: UpdateTodoDto,
   ) {
     const updatedTodo = await this.todosService.update(
       id,
-      userID,
+      user.id,
       updateTodoDto,
     );
     if (updatedTodo) return updatedTodo;
@@ -63,9 +62,9 @@ export class TodosController {
   @HttpCode(204)
   async remove(
     @Param('id', ParseIntPipe) id: number,
-    @Body('userID') userID: number,
+    @Body('user') user: User,
   ) {
-    if (await this.todosService.remove(id, userID)) return;
+    if (await this.todosService.remove(id, user.id)) return;
     else throw new NotFoundException('item not found');
   }
 }
