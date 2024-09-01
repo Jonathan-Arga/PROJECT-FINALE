@@ -7,15 +7,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { UsersService } from 'src/users/users.service';
 
-// auth guard
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(
-    private userService: UsersService,
-    private jwtService: JwtService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
 
   canActivate(
     context: ExecutionContext,
