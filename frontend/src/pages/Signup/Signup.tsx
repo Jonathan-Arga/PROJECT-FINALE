@@ -41,7 +41,7 @@ export default function Signup() {
       })
       .catch((err) => alert(err.response.data.message));
     if (!res) return;
-    if (res.status != 201) return alert("idfk" + res.data.message);
+    if (res.status != 201) return alert(res.data.message);
     sessionStorage.setItem("token", res.data.token);
     navigate("/");
   };

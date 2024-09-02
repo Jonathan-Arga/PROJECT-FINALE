@@ -29,7 +29,6 @@ export class AppService {
 
   async signup(createUserDto: CreateUserDto) {
     createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    console.log('User: ' + JSON.stringify(createUserDto));
     try {
       const newUser = await this.usersService.create(createUserDto);
       return this.jwtService.signAsync({
