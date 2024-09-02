@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate {
         secret: process.env.SECRET || 'secret',
       });
       if (!user) return false;
-      req.body.user = await this.userService.findOne(user.id);
+      req.body.user = await this.userService.findOne(user.sub);
       return true;
     } catch {
       throw new UnauthorizedException();

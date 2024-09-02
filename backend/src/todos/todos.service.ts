@@ -16,9 +16,11 @@ export class TodosService {
   }
 
   findAll(userID: number): Promise<Todo[]> {
+    console.log('userID:', userID);
+
     return this.todoRepository.find({
-      select: ['id', 'name', 'checked'],
       where: { user: { id: userID } },
+      relations: ['user'],
     });
   }
 
