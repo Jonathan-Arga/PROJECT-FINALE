@@ -31,18 +31,17 @@ export default function Signup() {
     if (PasswordRef.current.value.length < 8)
       return alert("Password must be at least 8 characters long");
 
-    const res = await axios.post("/signup", {
-      firstName: FirstNameRef.current.value,
-      lastName: LastNameRef.current.value,
-      username: UsernameRef.current.value,
-      email: EmailRef.current.value,
-      password: PasswordRef.current.value,
-    });
-    console.log(res);
-    console.log("Response Above");
-
+    const res = await axios
+      .post("/signup", {
+        firstName: FirstNameRef.current.value,
+        lastName: LastNameRef.current.value,
+        username: UsernameRef.current.value,
+        email: EmailRef.current.value,
+        password: PasswordRef.current.value,
+      })
+      .catch((err) => alert(err.response.data.message));
+    if (!res) return;
     if (res.status != 201) return alert("idfk" + res.data.message);
-    console.log(res.data);
     sessionStorage.setItem("token", res.data.token);
     navigate("/");
   };
