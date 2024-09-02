@@ -4,6 +4,7 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Todo } from './entities/todo.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class TodosService {
@@ -15,10 +16,10 @@ export class TodosService {
     return { ...returnedTodo, user: undefined };
   }
 
-  findAll(userID: number): Promise<Todo[]> {
+  findAll(user: User): Promise<Todo[]> {
     return this.todoRepository.find({
       select: ['id', 'name', 'checked'],
-      where: { user: { id: userID } },
+      where: { user },
     });
   }
 

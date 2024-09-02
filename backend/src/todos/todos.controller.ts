@@ -30,7 +30,7 @@ export class TodosController {
 
   @Get()
   findAll(@Body('user') user: User) {
-    return this.todosService.findAll(user.id);
+    return this.todosService.findAll(user);
   }
 
   @Get(':id')
