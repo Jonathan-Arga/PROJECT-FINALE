@@ -1,6 +1,5 @@
 import {
   Controller,
-  Post,
   Get,
   Body,
   Patch,
@@ -12,7 +11,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { User } from './entities/user.entity';
@@ -21,13 +19,18 @@ import { User } from './entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get()
+  @UseGuards(AuthGuard)
+  getUserByID(@Body('user') user: User) {
+    return user.id;
+  }
+  @Get('all')
   getallUsers() {
     return this.usersService.findAll();
   }
-  @Post()
-  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
+  // @Post()
+  // create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+  //   return this.usersService.create(createUserDto);
+  // }
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(

@@ -30,10 +30,13 @@ export class CommentsService {
     return await this.commentsRepository.findOne({ where: { id } });
   }
   async findByUser(user: User) {
-    return await this.commentsRepository.findOne({ where: { user } });
+    return await this.commentsRepository.find({ where: { user } });
   }
   async findByPost(post: Post) {
-    return await this.commentsRepository.findOne({ where: { post } });
+    return await this.commentsRepository.find({
+      where: { post },
+      relations: ['user'],
+    });
   }
 
   async update(id: number, updateCommentDto: UpdateCommentDto) {

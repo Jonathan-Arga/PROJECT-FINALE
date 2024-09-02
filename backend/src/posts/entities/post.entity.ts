@@ -24,7 +24,7 @@ export class Post {
   @IsString()
   body: string;
 
-  @OneToMany(() => Comment, (comment) => comment.post)
+  @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
   comments: Comment[];
 
   @ManyToOne(() => User, (user) => user.posts)

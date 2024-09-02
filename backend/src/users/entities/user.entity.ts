@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Post } from 'src/posts/entities/post.entity';
 import { Todo } from 'src/todos/entities/todo.entity';
@@ -11,14 +11,17 @@ export class User {
 
   @Column()
   @IsString()
+  @Length(2, 40)
   firstName: string;
 
   @Column()
   @IsString()
+  @Length(2, 40)
   lastName: string;
 
   @Column()
   @IsString()
+  @Length(4, 20)
   username: string;
 
   @Column()
@@ -27,6 +30,7 @@ export class User {
 
   @Column()
   @IsString()
+  @Length(8, 50)
   password: string;
 
   @OneToMany(() => Todo, (todo) => todo.user)
