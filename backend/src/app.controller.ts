@@ -1,10 +1,4 @@
-import {
-  Body,
-  Controller,
-  HttpCode,
-  Post,
-  ValidationPipe,
-} from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LoginDto } from './dtos/login.dto';
 import { CreateUserDto } from './users/dto/create-user.dto';
@@ -14,21 +8,26 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('login')
-  @HttpCode(200)
   async login(@Body(ValidationPipe) loginDto: LoginDto) {
     try {
-      return { token: await this.appService.login(loginDto) };
+      const token = await this.appService.login(loginDto);
+      return { token };
     } catch (error) {
       throw error;
     }
   }
 
   @Post('signup')
-  @HttpCode(200)
   async signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    console.log('signup');
     try {
-      return { token: await this.appService.signup(createUserDto) };
+      const token = await this.appService.signup(createUserDto);
+      console.log('Token:' + token);
+
+      return { token };
     } catch (error) {
+      console.log(error);
+
       throw error;
     }
   }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -12,6 +12,11 @@ export class PostsService {
   ) {}
 
   async create(createPostDto: CreatePostDto) {
+    if (!createPostDto.title || !createPostDto.body)
+      throw new HttpException(
+        'Invalid Arguments',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
     const createdPost = this.postsRepository.create(createPostDto);
     const savedPost = await this.postsRepository.save(createdPost);
 

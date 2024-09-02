@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { PostsService } from 'src/posts/posts.service';
-import { UsersService } from 'src/users/users.service';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { User } from 'src/users/entities/user.entity';
+import { UserlessComment } from './entities/comment.entity';
 
 @Controller('api/comments')
 @UseGuards(AuthGuard)
@@ -21,23 +23,31 @@ export class CommentsController {
   constructor(
     private readonly commentsService: CommentsService,
     private readonly postsService: PostsService,
-    private readonly usersService: UsersService,
   ) {}
 
-  @Get('post/:postid')
-  async findByPost(@Param('postid') postid: string) {
-    return await this.commentsService.findByPost(
+  @Get(':postid')
+  async findByPost(
+    @Param('postid') postid: string,
+    @Body('user') user: User,
+  ): Promise<UserlessComment[]> {
+    const comments = await this.commentsService.findByPost(
       await this.postsService.findOne(+postid),
     );
+
+    return comments.map((comment) =>
+      comment.user.id === user.id
+        ? { ...comment, user: true }
+        : { ...comment, user: false },
+    );
   }
-  // use guards below to check if the user is logged in
+
   @Post()
-  async create(@Body() createCommentDto: CreateCommentDto) {
+  async create(@Body(ValidationPipe) createCommentDto: CreateCommentDto) {
     const post = await this.postsService.findOne(createCommentDto.postid);
     return await this.commentsService.create(
       createCommentDto,
       post,
-      await this.usersService.findOne(createCommentDto.userid),
+      createCommentDto.user,
     );
   }
 

@@ -1,4 +1,5 @@
 import { IsDefined, IsNumber, IsString } from 'class-validator';
+import { User } from 'src/users/entities/user.entity';
 import { Column } from 'typeorm';
 
 export class CreateCommentDto {
@@ -17,6 +18,5 @@ export class CreateCommentDto {
   postid: number;
 
   @IsDefined()
-  @IsNumber()
-  userid: number;
+  user: User;
 }

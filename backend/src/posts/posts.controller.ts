@@ -31,7 +31,6 @@ export class PostsController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.postsService.findOne(id);
   }
-  // use guards below to check if the user is logged in
   @Post()
   async create(@Body(ValidationPipe) createPostDto: CreatePostDto) {
     if (!createPostDto.title || !createPostDto.body)
@@ -39,7 +38,13 @@ export class PostsController {
         'Invalid Arguments',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
-    return await this.postsService.create(createPostDto);
+    try {
+      console.log(createPostDto);
+
+      return await this.postsService.create(createPostDto);
+    } catch (err) {
+      throw err;
+    }
   }
 
   @Patch(':id')

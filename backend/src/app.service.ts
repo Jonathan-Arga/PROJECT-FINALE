@@ -29,11 +29,16 @@ export class AppService {
 
   async signup(createUserDto: CreateUserDto) {
     createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
-    const newUser = await this.usersService.create(createUserDto);
-
-    return await this.jwtService.signAsync({
-      sub: newUser.id,
-      username: newUser.username,
-    });
+    console.log('User: ' + JSON.stringify(createUserDto));
+    try {
+      const newUser = await this.usersService.create(createUserDto);
+      return this.jwtService.signAsync({
+        sub: newUser.id,
+        username: newUser.username,
+      });
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 }

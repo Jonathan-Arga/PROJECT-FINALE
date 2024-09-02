@@ -1,4 +1,4 @@
-import { IsDefined, IsString } from 'class-validator';
+import { IsBoolean, IsDefined, IsString } from 'class-validator';
 import { Post } from 'src/posts/entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -9,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
 @Entity()
 export class Comment {
   @PrimaryGeneratedColumn()
@@ -26,7 +25,7 @@ export class Comment {
   body: string;
 
   @IsDefined()
-  @ManyToOne(() => Post, (post) => post.comments)
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
   @JoinColumn()
   post: Post;
 
@@ -34,4 +33,30 @@ export class Comment {
   @ManyToOne(() => User, (user) => user.comments)
   @JoinColumn()
   user: User;
+}
+
+@Entity()
+export class UserlessComment {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  @IsDefined()
+  @IsString()
+  title: string;
+
+  @Column()
+  @IsDefined()
+  @IsString()
+  body: string;
+
+  @IsDefined()
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  post: Post;
+
+  @JoinColumn()
+  @IsDefined()
+  @IsBoolean()
+  user: boolean;
 }

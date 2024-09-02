@@ -11,11 +11,12 @@ export class UsersService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
-    if (this.findOneByUsername(createUserDto.username))
-      throw new HttpException('Username already exists', 400);
-    if (this.findOneByEmail(createUserDto.email))
-      throw new HttpException('Email already exists', 400);
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      await this.isNewUserValid(createUserDto);
+    } catch (err) {
+      throw err;
+    }
 
     const newUser = this.userRepository.create(createUserDto);
     return this.userRepository.save(newUser);
@@ -42,5 +43,13 @@ export class UsersService {
 
   remove(id: number) {
     return this.userRepository.delete({ id });
+  }
+
+  private async isNewUserValid(user: CreateUserDto): Promise<boolean> {
+    if (await this.findOneByUsername(user.username))
+      throw new HttpException('Username already exists', 400);
+    if (await this.findOneByEmail(user.email))
+      throw new HttpException('Email already exists', 400);
+    return true;
   }
 }
