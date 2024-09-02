@@ -4,12 +4,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getAuthHeader } from "../../constants";
 import { Post } from "./PostList";
 import CommentList from "./CommentList";
-import { getUserID } from "../../constants";
 
 export default function PostPage() {
   const params = useParams();
   const [post, setPost] = useState<Post | null>(null);
-  const [userID, setUserID] = useState<number>(NaN);
   const [editingPost, setEditingPost] = useState<boolean>(false);
   const [postTitle, setPostTitle] = useState<string>("");
   const [postBody, setPostBody] = useState<string>("");
@@ -40,8 +38,6 @@ export default function PostPage() {
 
   useEffect(() => {
     const getStuff = async () => {
-      setUserID(await getUserID());
-
       const res = await axios.get("/api/posts/" + params.postid, {
         headers: getAuthHeader(),
       });
@@ -75,7 +71,7 @@ export default function PostPage() {
               <>
                 <h1>{postTitle}</h1>
                 <p>{postBody}</p>
-                {userID === post.userid && (
+                {post.user && (
                   <>
                     <button onClick={editToggle}>Edit</button>
                     <button onClick={deletePost}>Delete</button>

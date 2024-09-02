@@ -6,7 +6,7 @@ export type Post = {
   id: number;
   title: string;
   body: string;
-  userid: number;
+  user: boolean;
 };
 
 export default function PostList() {
