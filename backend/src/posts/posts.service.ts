@@ -30,7 +30,7 @@ export class PostsService {
   async findOne(id: number) {
     return await this.postsRepository.findOne({
       where: { id },
-      relations: ['comments'],
+      relations: ['comments', 'user'],
     });
   }
 

@@ -3,11 +3,16 @@ import { useState } from "react";
 import { getAuthHeader } from "../../constants";
 import axios from "axios";
 
-export default function Comment({ comment }: { comment: CommentType }) {
+interface CommentProps {
+  comment: CommentType;
+}
+
+export default function Comment(props: CommentProps) {
+  const { comment } = props;
   const [editingComment, setEditingComment] = useState<boolean>(false);
   const [commentTitle, setCommentTitle] = useState<string>(comment.title);
   const [commentBody, setCommentBody] = useState<string>(comment.body);
-
+  console.log(comment);
   const editToggle = () => {
     setEditingComment((prev) => !prev);
     setCommentTitle(comment!.title);

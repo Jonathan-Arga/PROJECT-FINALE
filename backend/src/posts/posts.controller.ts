@@ -16,6 +16,7 @@ import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('api/posts')
 @UseGuards(AuthGuard)
@@ -28,8 +29,13 @@ export class PostsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    return await this.postsService.findOne(id);
+  async findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('user') user: User,
+  ) {
+    const post = await this.postsService.findOne(id);
+
+    return { ...post, user: post.user.id === user.id };
   }
   @Post()
   async create(@Body(ValidationPipe) createPostDto: CreatePostDto) {
