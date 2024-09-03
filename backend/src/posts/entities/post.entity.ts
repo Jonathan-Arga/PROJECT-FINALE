@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Entity()
 export class Post {
   @PrimaryGeneratedColumn()
   id: number;

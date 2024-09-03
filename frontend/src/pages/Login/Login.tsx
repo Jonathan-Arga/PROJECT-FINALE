@@ -13,6 +13,7 @@ export default function Login() {
     e.preventDefault();
     if (!UsernameRef.current?.value || !PasswordRef.current?.value)
       return alert("Please fill in all fields");
+
     const res = await axios
       .post("/login", {
         username: UsernameRef.current.value,

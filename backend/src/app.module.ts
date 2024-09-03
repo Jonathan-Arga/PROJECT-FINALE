@@ -27,7 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: process.env.PASSWORD || 'z10mz10m',
+      password: 'z10mz10m',
       database: 'projectDB',
       entities: [User, Todo, Post, Comment],
       synchronize: true,
